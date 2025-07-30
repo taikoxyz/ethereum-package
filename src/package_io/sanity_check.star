@@ -208,6 +208,7 @@ ADDITIONAL_SERVICES_PARAMS = [
     "goomy_blob",
     "el_forkmon",
     "blockscout",
+    "deploy_4788",
     "beacon_metrics_gazer",
     "dora",
     "full_beaconchain_explorer",
