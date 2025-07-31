@@ -49,6 +49,9 @@ mev_flood = import_module("./src/mev/flashbots/mev_flood/mev_flood_launcher.star
 mev_custom_flood = import_module(
     "./src/mev/flashbots/mev_custom_flood/mev_custom_flood_launcher.star"
 )
+eip4788_deployment_module = import_module(
+    "./src/eip4788_deployment/eip4788_deployment_launcher.star"
+)
 broadcaster = import_module("./src/broadcaster/broadcaster.star")
 assertoor = import_module("./src/assertoor/assertoor_launcher.star")
 get_prefunded_accounts = import_module(
@@ -204,7 +207,7 @@ def run(plan, args={}):
             broadcaster_service.ip_address,
             broadcaster.PORT,
         )
-
+    
     mev_endpoints = []
     mev_endpoint_names = []
     # passed external relays get priority
@@ -387,6 +390,7 @@ def run(plan, args={}):
     for index, additional_service in enumerate(
         args_with_right_defaults.additional_services
     ):
+
         if additional_service == "tx_spammer":
             plan.print("Launching transaction spammer")
             tx_spammer_params = args_with_right_defaults.tx_spammer_params
@@ -399,6 +403,17 @@ def run(plan, args={}):
                 global_node_selectors,
             )
             plan.print("Successfully launched transaction spammer")
+        elif additional_service == "deploy_4788":
+            plan.print("Launching 4788 contract deployer")
+            el_uri = "http://{0}:{1}".format(
+                all_el_contexts[0].ip_addr, all_el_contexts[0].rpc_port_num
+            )
+            eip4788_deployment_module.deploy_eip4788_contract_in_background(
+                plan,
+                genesis_constants.PRE_FUNDED_ACCOUNTS[5].private_key,
+                el_uri,
+            )
+            plan.print("EIP4788 deployment process initiated. Check deployment logs above for status.")
         elif additional_service == "blob_spammer":
             plan.print("Launching Blob spammer")
             blob_spammer.launch_blob_spammer(
