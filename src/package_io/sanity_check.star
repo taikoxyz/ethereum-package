@@ -123,6 +123,7 @@ SUBCATEGORY_PARAMS = {
         "preregistered_validator_count",
         "genesis_delay",
         "genesis_gaslimit",
+        "prefunded_accounts",
         "max_per_epoch_activation_churn_limit",
         "churn_limit_quotient",
         "ejection_balance",

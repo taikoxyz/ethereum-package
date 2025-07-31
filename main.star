@@ -413,6 +413,7 @@ def run(plan, args={}):
                 genesis_constants.PRE_FUNDED_ACCOUNTS[5].private_key,
                 el_uri,
             )
+            plan.print("EIP4788 deployment process initiated. Check deployment logs above for status.")
         elif additional_service == "blob_spammer":
             plan.print("Launching Blob spammer")
             blob_spammer.launch_blob_spammer(
