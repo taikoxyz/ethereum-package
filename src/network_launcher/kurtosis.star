@@ -52,17 +52,8 @@ def launch(plan, network_params, participants, parallel_keystore_generation):
     plan.print("Generating EL CL data")
 
     # we are running capella genesis - deprecated
-    if network_params.deneb_fork_epoch > 0:
-        ethereum_genesis_generator_image = (
-            constants.ETHEREUM_GENESIS_GENERATOR.capella_genesis
-        )
-    # we are running deneb genesis - default behavior
-    elif network_params.deneb_fork_epoch == 0:
-        ethereum_genesis_generator_image = (
-            constants.ETHEREUM_GENESIS_GENERATOR.deneb_genesis
-        )
-    # we are running electra - experimental
-    elif network_params.electra_fork_epoch != None:
+    # Check electra first since it's more specific/experimental
+    if network_params.electra_fork_epoch != None and network_params.electra_fork_epoch < 100000000:
         if network_params.electra_fork_epoch == 0:
             ethereum_genesis_generator_image = (
                 constants.ETHEREUM_GENESIS_GENERATOR.verkle_genesis
@@ -71,6 +62,15 @@ def launch(plan, network_params, participants, parallel_keystore_generation):
             ethereum_genesis_generator_image = (
                 constants.ETHEREUM_GENESIS_GENERATOR.verkle_support_genesis
             )
+    # we are running deneb genesis - default behavior
+    elif network_params.deneb_fork_epoch == 0:
+        ethereum_genesis_generator_image = (
+            constants.ETHEREUM_GENESIS_GENERATOR.deneb_genesis
+        )
+    elif network_params.deneb_fork_epoch > 0:
+        ethereum_genesis_generator_image = (
+            constants.ETHEREUM_GENESIS_GENERATOR.capella_genesis
+        )
     else:
         fail(
             "Unsupported fork epoch configuration, need to define either deneb_fork_epoch or electra_fork_epoch"
