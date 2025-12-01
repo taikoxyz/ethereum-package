@@ -212,31 +212,50 @@ def get_config(
             constants.RPC_PORT_ID: public_ports_for_component[2],
             constants.WS_PORT_ID: public_ports_for_component[3],
             constants.METRICS_PORT_ID: public_ports_for_component[4],
-            constants.L2_RPC_PORT_ID_1: public_ports_for_component[5],
-            constants.RPC_ROUTER_PORT_ID: RPC_ROUTER_PUBLIC_PORT,
+            constants.RPC_ROUTER_PORT_ID: public_ports_for_component[5],
         }
 
-        # Currently supporting 10 but 1 (10110) is "default" exposed
-        if num_of_l2s > 1:
-            for i in range(1, num_of_l2s):
-                if i == 1:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_2] = public_ports_for_component[6]
-                elif i == 2:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_3] = public_ports_for_component[7]
-                elif i == 3:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_4] = public_ports_for_component[8]
-                elif i == 4:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_5] = public_ports_for_component[9]
-                elif i == 5:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_6] = public_ports_for_component[10]
-                elif i == 6:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_7] = public_ports_for_component[11]
-                elif i == 7:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_8] = public_ports_for_component[12]
-                elif i == 8:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_9] = public_ports_for_component[13]
-                elif i == 9:
-                    additional_public_port_assignments[constants.L2_RPC_PORT_ID_10] = public_ports_for_component[14]
+        for i in range(num_of_l2s):
+            if i == 0:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_1
+                ] = public_ports_for_component[6]
+            elif i == 1:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_2
+                ] = public_ports_for_component[7]
+            elif i == 2:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_3
+                ] = public_ports_for_component[8]
+            elif i == 3:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_4
+                ] = public_ports_for_component[9]
+            elif i == 4:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_5
+                ] = public_ports_for_component[10]
+            elif i == 5:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_6
+                ] = public_ports_for_component[11]
+            elif i == 6:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_7
+                ] = public_ports_for_component[12]
+            elif i == 7:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_8
+                ] = public_ports_for_component[13]
+            elif i == 8:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_9
+                ] = public_ports_for_component[14]
+            elif i == 9:
+                additional_public_port_assignments[
+                    constants.L2_RPC_PORT_ID_10
+                ] = public_ports_for_component[15]
 
         public_ports.update(
             shared_utils.get_port_specs(additional_public_port_assignments)
@@ -247,33 +266,35 @@ def get_config(
         constants.UDP_DISCOVERY_PORT_ID: discovery_port,
         constants.ENGINE_RPC_PORT_ID: ENGINE_RPC_PORT_NUM,
         constants.RPC_PORT_ID: RPC_PORT_NUM,
-        constants.L2_RPC_PORT_ID_1: L2_START_RPC_PORT_NUM,
-        constants.RPC_ROUTER_PORT_ID: RPC_ROUTER_PORT_NUM,
         constants.WS_PORT_ID: WS_PORT_NUM,
         constants.METRICS_PORT_ID: METRICS_PORT_NUM,
     }
 
-    if num_of_l2s > 1:
-            for i in range(1, num_of_l2s):
-                l2_port_inside_container = L2_START_RPC_PORT_NUM + (i*L2_RPC_PORT_OFFSET)
-                if i == 1:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_2] = l2_port_inside_container
-                elif i == 2:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_3] = l2_port_inside_container
-                elif i == 3:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_4] = l2_port_inside_container
-                elif i == 4:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_5] = l2_port_inside_container
-                elif i == 5:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_6] = l2_port_inside_container
-                elif i == 6:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_7] = l2_port_inside_container
-                elif i == 7:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_8] = l2_port_inside_container
-                elif i == 8:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_9] = l2_port_inside_container
-                elif i == 9:
-                    used_port_assignments[constants.L2_RPC_PORT_ID_10] = l2_port_inside_container
+    for i in range(num_of_l2s):
+        l2_port_inside_container = (
+            L2_START_RPC_PORT_NUM if i == 0 else L2_START_RPC_PORT_NUM + (i * L2_RPC_PORT_OFFSET)
+        )
+        if i == 0:
+            used_port_assignments[constants.L2_RPC_PORT_ID_1] = l2_port_inside_container
+        elif i == 1:
+            used_port_assignments[constants.L2_RPC_PORT_ID_2] = l2_port_inside_container
+        elif i == 2:
+            used_port_assignments[constants.L2_RPC_PORT_ID_3] = l2_port_inside_container
+        elif i == 3:
+            used_port_assignments[constants.L2_RPC_PORT_ID_4] = l2_port_inside_container
+        elif i == 4:
+            used_port_assignments[constants.L2_RPC_PORT_ID_5] = l2_port_inside_container
+        elif i == 5:
+            used_port_assignments[constants.L2_RPC_PORT_ID_6] = l2_port_inside_container
+        elif i == 6:
+            used_port_assignments[constants.L2_RPC_PORT_ID_7] = l2_port_inside_container
+        elif i == 7:
+            used_port_assignments[constants.L2_RPC_PORT_ID_8] = l2_port_inside_container
+        elif i == 8:
+            used_port_assignments[constants.L2_RPC_PORT_ID_9] = l2_port_inside_container
+        elif i == 9:
+            used_port_assignments[constants.L2_RPC_PORT_ID_10] = l2_port_inside_container
+    used_port_assignments[constants.RPC_ROUTER_PORT_ID] = RPC_ROUTER_PORT_NUM
 
     used_ports = shared_utils.get_port_specs(used_port_assignments)
 
