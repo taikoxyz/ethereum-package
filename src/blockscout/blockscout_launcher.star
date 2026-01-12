@@ -77,22 +77,9 @@ def launch_blockscout(
         node_selectors=global_node_selectors,
     )
 
-    config_verif = get_config_verif(
-        global_node_selectors,
-        port_publisher,
-        additional_service_index,
-    )
-
-    verif_service_name = "{}-verif".format(real_service_name)
-    verif_service = plan.add_service(verif_service_name, config_verif)
-    verif_url = "http://{}:{}/".format(
-        verif_service.hostname, verif_service.ports["http"].number
-    )
-
     config_backend = get_config_backend(
         postgres_output,
         el_client_rpc_url,
-        verif_url,
         el_client_name,
         global_node_selectors,
         port_publisher,
@@ -136,7 +123,6 @@ def get_config_verif(node_selectors, port_publisher, additional_service_index):
 def get_config_backend(
     postgres_output,
     el_client_rpc_url,
-    verif_url,
     el_client_name,
     node_selectors,
     port_publisher,
@@ -175,9 +161,10 @@ def get_config_backend(
             "ETHEREUM_JSONRPC_TRACE_URL": el_client_rpc_url,
             "DATABASE_URL": database_url,
             "COIN": "ETH",
-            "MICROSERVICE_SC_VERIFIER_ENABLED": "true",
-            "MICROSERVICE_SC_VERIFIER_URL": verif_url,
-            "MICROSERVICE_SC_VERIFIER_TYPE": "sc_verifier",
+            # Disable smart-contract-verifier by default for local devnets.
+            # The verifier service can be flaky (e.g. fetching/parsing solidity list json) and
+            # is not required for basic explorer functionality.
+            "MICROSERVICE_SC_VERIFIER_ENABLED": "false",
             "INDEXER_DISABLE_PENDING_TRANSACTIONS_FETCHER": "true",
             "ECTO_USE_SSL": "false",
             "NETWORK": "Kurtosis",
